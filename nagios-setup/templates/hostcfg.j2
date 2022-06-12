@@ -1,0 +1,100 @@
+define host{
+	host_name				{{ host_name }}
+	alias				https://iserversupport.com/billing/admin/clientssummary.php?userid={{ cid }}
+	address				{{ custom_host }}
+check_command check_tcp1!80
+max_check_attempts              5
+}
+define service{
+          use                 generic-service
+          host_name           {{ host_name }}
+          service_description CPU Load
+          check_command       check_nrpe!check_load
+          }
+define service{
+          use                 generic-service
+          host_name           {{ host_name }}
+          service_description Current Users
+          check_command       check_nrpe!check_users
+          }
+define service{
+          use                      generic-service ;Name of service template to use
+          host_name                {{ host_name }}
+          service_description      Disk check
+          check_command            check_nrpe!check_allspace
+          }
+define service{
+          use                 generic-service
+          host_name           {{ host_name }}
+          service_description Total Processes
+          check_command       check_nrpe!check_total_procs
+          }
+define service{
+          use                 generic-service
+          host_name           {{ host_name }}
+          service_description Zombie Processes
+          check_command       check_nrpe!check_zombie_procs
+}
+define service{
+        use                             generic-service         ; Name of service template to use
+        host_name                       {{ host_name }}
+        service_description             HTTP
+        contact_groups                  admins
+        check_command                   check_http
+        }
+define service{
+        use                             generic-service         ; Name of service template to use
+        host_name                       {{ host_name }}
+        service_description             Mail queue
+        check_command                   check_nrpe!check_exim
+        }
+define service{
+        use                             generic-service         ; Name of service template to use
+        host_name                       {{ host_name }}
+        service_description             Firewall
+        check_command                   check_nrpe!check_firewall
+        }
+define service{
+        use                             generic-service         ; Name of service template to use
+        host_name                       {{ host_name }}
+        service_description             IMAP
+        check_command                   check_imap
+        }
+define service{
+        use                             generic-service         ; Name of service template to use
+        host_name                       {{ host_name }}
+        service_description             POP
+        check_command                   check_pop
+        }
+define service{
+        use                             generic-service         ; Name of service template to use
+        host_name                       {{ host_name }}
+        service_description             MySQL
+        contact_groups                  admins
+        check_command                   check_nrpe!check_mysql
+        }
+define service{
+        use                             generic-service         ; Name of service template to use
+        host_name                       {{ host_name }}
+        service_description             FTP
+        check_command                   check_ftp
+        }
+define service{
+        use                             generic-service         
+        host_name                       {{ host_name }}
+        service_description             SMTP
+        check_command                   check_smtp
+        }
+define service{
+        use                             generic-service
+        host_name                       {{ host_name }}
+        service_description             check ddos
+        check_command                   check_nrpe!check_ddos
+        }
+define service{
+	use 				generic-service
+	host_name 			{{ host_name }}
+	service_description 		Tmp Partition
+	check_command 			check_nrpe!check_tmp
+}
+

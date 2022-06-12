@@ -1,0 +1,25 @@
+---
+      - name: Install nagios server on RedHat
+        yum:
+          name: "{{ item }}"
+          state: latest
+        with_items: 
+          - epel-release
+          - nrpe
+          - nagios-plugins
+        when: ansible_os_family == "RedHat"
+      - name: Install nagios server on Debian
+        apt:
+          name: "{{ item }}"
+          state: latest
+        with_items: 
+          - nagios-nrpe-server
+          - nagios-plugins
+        when: ansible_os_family == "Debian"
+      
+      - name: running handler for above tasks
+        debug: msg='running handler for restart nrpe'
+        notify: restart nrpe
+
+        
+

@@ -1,0 +1,8 @@
+{
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json#/definitions/playbook": [
+            "file:///home/iserver/iserver-proj/monitoringsetup/setup.yml"
+        ],
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json#/definitions/tasks": "file:///home/iserver/iserver-proj/monitoringsetup/nagios-setup/tasks/configure.yml"
+    }
+}

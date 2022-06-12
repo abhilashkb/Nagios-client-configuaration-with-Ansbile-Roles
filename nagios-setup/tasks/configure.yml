@@ -1,0 +1,47 @@
+---
+    - name: config file setup
+      copy:
+       src: nrpe.cfg
+       dest: /etc/nagios/nrpe.cfg
+      when: ansible_os_family == "Debian"
+    - name: config file setup
+      copy:
+       src: nrperdht.cfg
+       dest: /etc/nagios/nrpe.cfg
+      when: ansible_os_family == "RedHat"
+    - name: add to sudoers file
+      lineinfile:
+       line: 'nagios ALL=(ALL) NOPASSWD: /usr/local/nagios/libexec/'
+       path: /etc/sudoers
+#nagios          ALL=(ALL) NOPASSWD: /usr/lib/nagios/plugins/
+    - name: copy plugins 
+      copy:
+        src: /usr/local/nagios/libexec/
+        dest: /usr/lib64/nagios/plugins/
+        owner: nagios
+        group: nagios    
+        mode: 0751
+    - name: install pymysql
+      pip:
+        name: pymysql
+        state: present
+      ignore_errors: yes
+    - name: add mysql user cmd
+      command: > 
+       mysql -e "CREATE USER 'monitoring'@'localhost' IDENTIFIED BY 'Dw1kTl473b7h3663gj'"
+      ignore_errors: true
+    - name: add ip to csf
+      command: > 
+       csf -a 198.244.147.219 iserver monitoring server
+      ignore_errors: true
+    - name: creating mysql user 
+      mysql_user:
+        name: monitoring
+        host: localhost
+        password: Dw1kTl473b7h3663gj
+
+        state: present
+      ignore_errors: true
+    - name: running handler for above tasks
+      debug: msg='running handler for restarting'
+      notify: restart nrpe   

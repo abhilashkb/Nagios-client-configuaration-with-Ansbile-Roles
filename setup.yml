@@ -1,0 +1,34 @@
+---
+   - name: configure nagios server
+     hosts: localhost
+     tasks:
+       - name: add host to inventory
+         lineinfile:
+          insertafter: '^\[audit\]'
+          line: '{{ host_name }} ansible_ssh_host={{ custom_host }} ansible_port={{ sshport }} ansible_user={{ user }}'
+          path: /etc/ansible/hosts
+         tags:
+          - localhost
+          - nagios
+       - name: Add nagios host config file
+         template:
+          dest: /usr/local/nagios/etc/servers/{{ host_name }}.cfg
+          src: ./nagios-setup/templates/hostcfg.j2
+         tags:
+           - localhost
+           - nagios
+       - name: restart nagios server
+         service:
+           name:  nagios
+           state: restarted
+         ignore_errors: yes
+         tags:
+            - localhost
+            - nagios
+   - name: configure nrpe client server 
+     hosts: "{{ host_name }}"
+     roles:
+       - role: nagios-setup
+         tags: [ nagios ]
+       - role: audit-setup
+         tags: [ audit ]

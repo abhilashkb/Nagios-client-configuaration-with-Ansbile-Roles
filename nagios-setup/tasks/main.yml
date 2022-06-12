@@ -1,0 +1,4 @@
+---
+# tasks file for nagios-setup
+  - import_tasks: install.yml
+  - import_tasks: configure.yml
