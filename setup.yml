@@ -30,5 +30,3 @@
      roles:
        - role: nagios-setup
          tags: [ nagios ]
-       - role: audit-setup
-         tags: [ audit ]
